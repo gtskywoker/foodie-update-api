@@ -58,6 +58,12 @@ app.post('/upload-new-image', upload.single('file'), async (req, res) => {
             const deleteEndTime = Date.now() - deleteStartTime;
             const deleteTimestamp = new Date().toISOString();
             console.log(`[${deleteTimestamp}] Old image (publicId: ${oldPublicId}) deleted from Cloudinary in ${deleteEndTime}ms. Result: ${JSON.stringify(deleteResult)}`);
+
+            // ตรวจสอบผลลัพธ์การลบ
+            if (deleteResult.result !== "ok") {
+                // หากลบไม่สำเร็จ, log ข้อความผิดพลาดที่ได้รับจาก Cloudinary
+                console.error(`[${deleteTimestamp}] Error deleting image (publicId: ${oldPublicId}) from Cloudinary. Result: ${JSON.stringify(deleteResult)}`);
+            }
         }
 
         const responseTime = Date.now() - requestStartTime;
